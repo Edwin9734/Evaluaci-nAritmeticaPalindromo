@@ -3,38 +3,51 @@ package org.example.evaluacion;
 
 import org.example.Pilas.PilaLineal;
 
+
 public class Aritmetica {
 
+    
 
-    //evaluar una expresión aritmética
+    // Aqui evaluamos una expreción aritmetica
     public static int evaluar(String expresion) throws Exception {
+        //declaramos dos pilas una para operandos y otra para operadores
+
         PilaLineal operandos = new PilaLineal();
         PilaLineal operadores = new PilaLineal();
-        int resultado = 0;
-        int operando1, operando2;
-        char operador;
-        int i = 0;
-        while (i < expresion.length()) {
-            if (expresion.charAt(i) == ' ') { //si es espacio se ignora
-                i++;//si es operador se inserta en la pila operadores
-            } else if (expresion.charAt(i) == '+' || expresion.charAt(i) == '-' || expresion.charAt(i) == '*' || expresion.charAt(i) == '/') {
+        int resultado = 0; // declaramos la variable que almacenará el resultado de la evaluación
+        int operando1, operando2; // declaramos las variables para almacenar los operandos
+        char operador; // Declara la variable para el signo del operador
+        int i = 0; // Índice para recorrer la expresión
+
+        // Aca iteramos la expresión caracter por caracter
+        while (i < expresion.length()){
+            // Si el caracter es un espacio en blanco se salta a la siguiente iteración
+            if (expresion.charAt(i) == ' '){
+                i++;
+            }
+            // si el caracter es  [+, -, *, /] se añade a la pila
+            else if (expresion.charAt(i) == '+' || expresion.charAt(i) == '-' || expresion.charAt(i) == '*' || expresion.charAt(i) == '/'){
                 operadores.insertar(expresion.charAt(i));
                 i++;
-            } else {//si el caracter es numero se lee hasta que se encuntre un espacion o un operador
+            }
+                //Si no es un espacio o un operador, se agrega a la pila de operandos
+            else {
                 String numero = "";
-                while (i < expresion.length() && expresion.charAt(i) != ' ' && expresion.charAt(i) != '+' && expresion.charAt(i) != '-' && expresion.charAt(i) != '*' && expresion.charAt(i) != '/') {
+                while (i < expresion.length() && expresion.charAt(i) != ' ' && expresion.charAt(i) != '+' && expresion.charAt(i) != '-' && expresion.charAt(i) != '*' && expresion.charAt(i) != '/'){
                     numero += expresion.charAt(i);
                     i++;
                 }
-                operandos.insertar(Integer.parseInt(numero));//se inserta el numero en la pila
+                operandos.insertar(Integer.parseInt(numero));
             }
-        }//mientras la pila no este vacia se hacen las operaciones
-        while (!operadores.pilaVacia()) {
+        }
+        //se realiza una lectura y ejecucion de los datos apilados
+        while (!operadores.pilaVacia()){
             try {
                 operando2 = (int) operandos.quitar();
-                operando1 = (int) operandos.quitar();// se quitan dos operandos y un operador
+                operando1 = (int) operandos.quitar();
                 operador = (char) operadores.quitar();
-                switch (operador) {
+                switch (operador){
+                    // Se realiza la operación correspondiente según el operador
                     case '+':
                         resultado = operando1 + operando2;
                         break;
@@ -48,13 +61,18 @@ public class Aritmetica {
                         resultado = operando1 / operando2;
                         break;
                 }
-                operandos.insertar(resultado);  //el resultado se inserta en la pila
-            } catch (Exception e) {//excepcion
+                // Se agrega el resultado de la operación a la pila de operandos para su posterior evaluación
+                operandos.insertar(resultado);
+            }
+                //hace una excepción por si hay algun error
+            catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
+        // Retorna el resultado
         return resultado;
     }
+    
     }
 
 
